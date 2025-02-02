@@ -20,9 +20,8 @@ RUN python -c "import nltk; nltk.download('stopwords')"
 # Copy all project files to the container
 COPY . .
 
-# Expose the port FastAPI runs on
+# Expose the port FastAPI runs on (optional, for local use)
 EXPOSE 8000
 
-# Use the PORT environment variable that Render sets
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-
+# Use the PORT environment variable that Render sets and bind to it
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
