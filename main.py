@@ -9,9 +9,18 @@ from nltk.stem.porter import PorterStemmer
 from textblob import TextBlob
 import language_tool_python
 import joblib
+import gdown  # Import gdown to download files
 
 # Ensure you have the NLTK resources
 nltk.download('stopwords')
+
+# Google Drive file link (direct download)
+file_id_embeddings= "1DBPhxW4lqETklPZz7H0ljEkGRJH0bojQ"
+file_id_metadata = "1RkJNhOzxVkdY17UAckRbAqSO_XlEU5Ah"
+
+# Download the files from Google Drive
+gdown.download(f"https://drive.google.com/uc?export=download&id={file_id_metadata}", "all_metadata.csv", quiet=False)
+gdown.download(f"https://drive.google.com/uc?export=download&id={file_id_embeddings}", "all_tfidf_embeddings.csv", quiet=False)
 
 # Load the pre-trained models and data
 df = pd.read_csv('all_metadata.csv')  # Load metadata (contains doctor specialist info)
