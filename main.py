@@ -9,6 +9,7 @@ from nltk.stem.porter import PorterStemmer
 from textblob import TextBlob
 import language_tool_python
 import joblib
+import uvicorn
 import gdown  # Import gdown to download files
 
 # Ensure you have the NLTK resources
@@ -101,3 +102,6 @@ async def predict_specialist(user_input: UserInput):
         "predicted_specialist": final_specialist,
         "confidence_score": round(confidence_score, 2)
     }
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
