@@ -5,9 +5,7 @@ import numpy as np
 import re
 import nltk
 from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
 from textblob import TextBlob
-import language_tool_python
 import joblib
 import uvicorn
 import gdown  # Import gdown to download files
@@ -30,9 +28,6 @@ model = joblib.load('random_forest_model.pkl')  # Load the trained Random Forest
 vectorizer = joblib.load('vectorizer.pkl')  # Load the TfidfVectorizer
 label_encoder = joblib.load('label_encoder.pkl')  # Load LabelEncoder
 
-tool = language_tool_python.LanguageTool('en-US')
-port_stem = PorterStemmer()
-
 # Function to remove emojis from text
 def remove_emojis(text: str) -> str:
     emoji_pattern = re.compile(
@@ -48,21 +43,11 @@ def remove_emojis(text: str) -> str:
     )
     return emoji_pattern.sub(r'', text)
 
-# Function to stem the text
-def stemming(content: str) -> str:
-    stemmed_content = re.sub('[^a-zA-Z]',' ', content)
-    stemmed_content = stemmed_content.lower()
-    stemmed_content = stemmed_content.split()
-    stemmed_content = [port_stem.stem(word) for word in stemmed_content if word not in stopwords.words('english')]
-    return ' '.join(stemmed_content)
-
-# Function to correct text (spelling and grammar)
+# Function to correct text (spelling)
 def correct_text(text: str) -> str:
     blob = TextBlob(text)
     corrected_text = blob.correct()
-    matches = tool.check(str(corrected_text))
-    final_text = language_tool_python.utils.correct(str(corrected_text), matches)
-    return final_text
+    return str(corrected_text)
 
 # Define FastAPI app
 app = FastAPI()
@@ -81,7 +66,6 @@ async def predict_specialist(user_input: UserInput):
     # Preprocessing
     input_text = user_input.comment
     input_text = remove_emojis(input_text)
-    input_text = stemming(input_text)
     input_text = correct_text(input_text)
     
     # Transform the input using the loaded vectorizer

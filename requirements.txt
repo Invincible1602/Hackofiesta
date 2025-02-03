@@ -4,7 +4,6 @@ pandas
 numpy
 nltk
 textblob
-language-tool-python[jdk]
 joblib
 scikit-learn
 gdown
