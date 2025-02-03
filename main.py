@@ -61,6 +61,10 @@ app = FastAPI()
 class UserInput(BaseModel):
     comment: str
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to my FastAPI app!"}
+
 # Define the API endpoint for prediction
 @app.post("/predict/")
 async def predict_specialist(user_input: UserInput):
