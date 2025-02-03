@@ -7,3 +7,4 @@ textblob
 language-tool-python
 joblib
 scikit-learn
+gdown
