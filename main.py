@@ -8,7 +8,19 @@ from nltk.corpus import stopwords
 from textblob import TextBlob
 import joblib
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 import gdown  # Import gdown to download files
+
+app = FastAPI()
+
+# Add CORS middleware to allow requests from different origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Ensure you have the NLTK resources
 nltk.download('stopwords')
