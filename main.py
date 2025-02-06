@@ -61,9 +61,6 @@ def correct_text(text: str) -> str:
     corrected_text = blob.correct()
     return str(corrected_text)
 
-# Define FastAPI app
-app = FastAPI()
-
 # Define the input data model
 class UserInput(BaseModel):
     comment: str
