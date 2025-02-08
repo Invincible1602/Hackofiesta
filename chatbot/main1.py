@@ -3,10 +3,19 @@ import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Load FAQ data
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
+
+
 def load_faq_data(file_path):
     df = pd.read_csv(file_path)
     df.columns = ["question", "answer"]
@@ -15,21 +24,21 @@ def load_faq_data(file_path):
 file_path = "improved_faq.csv"
 df = load_faq_data(file_path)
 
-# Load embedding model
+
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Generate embeddings
+
 faq_embeddings = model.encode(df["question"], convert_to_numpy=True)
 
-# Create FAISS index
+
 d, index = faq_embeddings.shape[1], faiss.IndexFlatL2(faq_embeddings.shape[1])
 index.add(faq_embeddings)
 
-# Save FAISS index
+
 faiss.write_index(index, "faq_index.faiss")
 df.to_csv("faq_data.csv", index=False)
 
-# Load FAISS index & Data
+
 index = faiss.read_index("faq_index.faiss")
 df = pd.read_csv("faq_data.csv")
 
@@ -50,6 +59,6 @@ def read_root():
     return {"Hello": "World"}
 
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn    
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
