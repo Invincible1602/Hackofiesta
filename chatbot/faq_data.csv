@@ -1,11 +1,11 @@
 question,answer
-How do I book an appointment?,"You can book an appointment online through our website or mobile app. Alternatively, you can call our helpline to schedule an appointment."
+How do I book an appointment?,"You can book an appointment online through our website. Alternatively, you can call our helpline to schedule an appointment."
 What should I bring for my first visit?,"For your first visit, please bring a valid government-issued ID, your insurance details (if applicable), and any previous medical records related to your condition."
 Can I reschedule my appointment?,"Yes, you can reschedule your appointment through the online portal or by contacting our customer support at least 24 hours in advance."
 Are walk-in appointments available?,Walk-in appointments are subject to availability. We recommend booking in advance to ensure a confirmed slot.
 What payment methods are accepted?,"We accept cash, credit/debit cards, and digital payment options like UPI and mobile wallets."
 How do I check a doctor's availability?,"You can check a doctor's availability using our online appointment system, which is updated in real time based on their schedule."
-Can I consult a doctor online?,"Yes, we offer teleconsultations with doctors. You can book an online consultation via our website or mobile app."
+Can I consult a doctor online?,"Yes, we offer teleconsultations with doctors. You can book an online consultation via our website."
 What happens if I miss my appointment?,"If you miss your appointment, you can reschedule through our platform. However, repeated no-shows may result in a cancellation fee."
 How are doctors assigned to patients?,"Our AI-powered system matches patients with the most suitable available doctor based on their symptoms, specialty, and preferred consultation time."
 Is emergency care available?,"Yes, our hospital provides 24/7 emergency care. In case of a medical emergency, please visit the emergency department immediately."
@@ -16,6 +16,60 @@ What are the consultation fees?,Consultation fees vary by doctor and specialty. 
 Can I access my medical records online?,"Yes, your medical records and prescriptions are securely stored in our system and can be accessed through your patient portal."
 Are there discounts for senior citizens?,"Yes, we offer special discounts for senior citizens and individuals with government-issued healthcare cards."
 What is the cancellation policy?,You can cancel your appointment up to 24 hours in advance without a fee. Late cancellations may incur a small charge.
-How do I provide feedback on my experience?,"You can provide feedback through our website, mobile app, or customer service. We value your input and use it to improve our services."
+How do I provide feedback on my experience?,You can provide feedback through our website. We value your input and use it to improve our services.
 Is my data secure in your system?,"Yes, we follow strict data security protocols to ensure your medical records and personal information remain confidential and protected."
-How can I contact customer support?,"You can reach our support team via phone, email, or live chat through our website and mobile app for any assistance."
+How can I contact customer support?,"You can reach our support team via phone, email, or live chat through our website."
+What is this doctor appointment booking platform?,"This platform allows users to book doctor appointments online, offering in-person consultations."
+How does this platform work?,"Users can search for doctors, view their availability, and book appointments online. They can also consult doctors"
+Do I need to create an account to book an appointment?,"Yes, you need to create an account to book an appointment and manage your bookings."
+Is this service free to use?,"Browsing and searching for doctors is free. However, consultation fees depend on the doctor."
+How do I register on the platform?,"You can register by providing your name, email, and phone number, and setting a password."
+What information do I need to sign up?,"You need your full name, email address, phone number, and a secure password."
+Can I use this platform without signing up?,"You can browse doctors, but booking an appointment requires an account."
+How do I reset my password?,Use the 'Forgot Password' option on the login page to reset your password via email.
+Is my personal data safe on this platform?,"Yes, we use encryption and security measures to protect your personal data."
+Can I access this platform on my mobile phone?,"No, the platform is currently working on website."
+How do I book an appointment?,"Search for a doctor, select an available slot, and confirm your booking."
+Can I choose a specific doctor?,"Yes, you can search for a specific doctor by name or specialization."
+How do I find a doctor by specialization?,Use the search feature to filter doctors by their specialization.
+How do I check a doctor’s availability?,Doctor profiles display available slots for booking.
+How far in advance can I book an appointment?,You can book appointments up to 30 days in advance.
+Can I book multiple appointments at once?,"Yes, you can book multiple appointments for different dates or doctors."
+What if I need an urgent appointment?,Use the 'urgent care' option to find available doctors for immediate consultation.
+What happens if the doctor is unavailable?,You can reschedule or choose another doctor.
+Can I book an appointment for someone else?,"Yes, you can book on behalf of a family member or friend."
+Is there a limit to the number of appointments I can book?,"There is no limit, but you cannot double-book the same time slot."
+How do I view my upcoming appointments?,Go to your profile and check the 'My Appointments' section.
+How do I reschedule an appointment?,Use the reschedule option in your appointment details.
+How do I cancel an appointment?,Go to your appointment details and select 'Cancel'.
+Will I get a refund if I cancel my appointment?,Refund policies depend on the doctor and platform terms.
+Can I change my appointment to a different doctor?,"Yes, but you will need to cancel the existing appointment first."
+Can I change my appointment location?,"Yes, if the doctor has multiple locations available."
+How do I know if my appointment is confirmed?,You will receive a confirmation email and notification.
+Can I get reminders for my appointments?,"Yes, reminders are sent via email and SMS."
+What if I miss my appointment?,Missed appointments are subject to the doctor's policy.
+How do I provide feedback about an appointment?,Use the 'Leave Feedback' option in your appointment history.
+How can I find a doctor near me?,Use the location filter to find doctors near your area.
+How do I check a doctor’s qualifications?,Doctor profiles include their qualifications and experience.
+Can I see patient reviews about a doctor?,"Yes, patient reviews and ratings are available on doctor profiles."
+How do I know if a doctor is available online?,"No, Doctors are not available for online consultation."
+Do all doctors offer video consultations?,No
+How do I contact a doctor before booking?,"Some doctors allow pre-consultation chat, check their profile for options."
+Can I request a specific doctor?,"Yes, you can search and book based on the doctor's availability."
+How do I know if a doctor is experienced in my condition?,Check the doctor's profile for specialties and patient feedback.
+Can I ask the doctor for a second opinion?,"Yes, you can consult another doctor for a second opinion."
+Are the doctors on this platform verified?,"Yes, all doctors are verified before they are listed."
+How do I pay for my appointment?,Payments can be made online using various methods.
+What payment methods do you accept?,"We accept credit/debit cards, UPI, net banking, and wallets."
+Can I pay after the consultation?,"Payment is usually required before booking, but some doctors may allow post-consultation payments."
+Do you offer refunds?,Refunds depend on the doctor's cancellation policy.
+Is my payment information secure?,"Yes, we use encrypted payment gateways for security."
+Can I use health insurance for my appointment?,"Some doctors accept health insurance, check with the provider."
+Do you provide invoices for consultations?,"Yes, invoices are available in your account after the consultation."
+Are there any hidden charges?,"No, all charges are displayed upfront."
+How to create an account?,"You can register by providing your name, email, and phone number, and setting a password."
+Hello,Hello! How can I assist you today?
+Hi,Hi there! How can I help you?
+What is Cureit?,Cureit is a digital healthcare platform that optimizes doctor availability and appointment allocation using AI and digital technology to enhance patient experience and hospital efficiency.
+How it works,"Cureit uses AI-driven algorithms to match patient needs with doctor availability, reducing wait times, managing schedules efficiently, and ensuring optimal resource utilization in healthcare facilities."
+Who are you?,"Hello, I am your AI assistant, Feel free to ask any doubts related to CureIt."
