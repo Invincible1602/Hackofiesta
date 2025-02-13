@@ -6,7 +6,6 @@ import pickle
 import gdown
 from sentence_transformers import util
 from transformers import pipeline
-from functools import lru_cache
 
 app = FastAPI()
 
@@ -35,9 +34,7 @@ with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
 # Load sentiment analysis pipeline
-@lru_cache(maxsize=1)
-def get_sentiment_pipeline():
-    return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+sentiment_pipeline = pipeline("sentiment-analysis")
 
 # Load saved tags and embeddings
 with open(TAGS_PATH, "r") as f:
@@ -56,8 +53,6 @@ class FeedbackRequest(BaseModel):
 
 def classify_feedback(feedback):
     """Classifies feedback as positive, negative, or neutral based on keywords and embeddings."""
-
-    sentiment_pipeline = get_sentiment_pipeline()  # Load only when needed
 
     # Neutral keyword-based classification
     neutral_keywords = {
