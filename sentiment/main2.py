@@ -34,7 +34,7 @@ with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
 # Load sentiment analysis pipeline
-sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 # Load saved tags and embeddings
 with open(TAGS_PATH, "r") as f:
