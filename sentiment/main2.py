@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 import torch
 import json
 import pickle
@@ -40,7 +40,7 @@ def load_resources():
     global model, sentiment_pipeline, tags, embeddings
 
     if model is None:
-        model = SentenceTransformer("all-MiniLM-L6-v2")  # Smaller model
+        model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
 
     if sentiment_pipeline is None:
         sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english", trust_remote_code=False)
@@ -58,18 +58,22 @@ def load_resources():
             embeddings[key] = torch.tensor(embeddings[key], dtype=torch.float16, device="cpu")
 
 class FeedbackRequest(BaseModel):
-    feedback: str
+    feedback: str = Field(..., min_length=1, description="Feedback text must not be empty")
 
-def classify_feedback(feedback):
+def classify_feedback(feedback: str):
     """Classifies feedback as positive, negative, or neutral using embeddings and sentiment analysis."""
 
     load_resources()  # Load models only when needed
 
-    feedback_embedding = model.encode(feedback, convert_to_tensor=True, device="cpu").half()  # Convert to float16
+    feedback = feedback.strip()  # Remove leading/trailing spaces
+    if not feedback:
+        raise HTTPException(status_code=400, detail="Feedback cannot be empty or just spaces")
+
+    feedback_embedding = model.encode(feedback, convert_to_tensor=True, device="cpu").half()
 
     # Neutral keyword-based classification
-    neutral_keywords = { "normal", "basic", "average", "fine", "okay", "decent",
-        "standard", "ordinary", "regular", "common", "nothing", "ok"
+    neutral_keywords = {"normal", "basic", "average", "fine", "okay", "decent",
+        "standard", "ordinary", "regular", "common", "nothing",
         "usual", "necessary", "general", "typical", "neutral"}
     if any(word in feedback.lower() for word in neutral_keywords):
         best_match_index = torch.argmax(util.pytorch_cos_sim(feedback_embedding, embeddings["neutral"])).item()
