@@ -4,8 +4,9 @@ import torch
 import json
 import pickle
 import gdown
-from sentence_transformers import util
+from sentence_transformers import SentenceTransformer, util
 from transformers import pipeline
+import os
 
 app = FastAPI()
 
@@ -14,65 +15,67 @@ MODEL_ID = "1p5ZWJ9I1j4yenHJMUt-EpGOqXiZImAtv"
 TAGS_ID = "1RjVrY91Zt7tRpb9MplE6fRJ5drSTFlf6"
 EMBEDDINGS_ID = "1OGWIhO7p5e7EwhVH3Ve3v5xT2Tpu1NRz"
 
-# Construct direct download URLs
-MODEL_URL = f"https://drive.google.com/uc?export=download&id={MODEL_ID}"
-TAGS_URL = f"https://drive.google.com/uc?export=download&id={TAGS_ID}"
-EMBEDDINGS_URL = f"https://drive.google.com/uc?export=download&id={EMBEDDINGS_ID}"
-
 # Local paths
 MODEL_PATH = "save_model.pkl"
 TAGS_PATH = "save_tags.json"
 EMBEDDINGS_PATH = "save_embeddings.json"
 
-# Download files
-gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
-gdown.download(TAGS_URL, TAGS_PATH, quiet=False)
-gdown.download(EMBEDDINGS_URL, EMBEDDINGS_PATH, quiet=False)
+# Function to download files if missing
+def download_file(url, path):
+    if not os.path.exists(path):
+        gdown.download(url, path, quiet=False)
 
-# Load the saved model
-with open(MODEL_PATH, "rb") as f:
-    model = pickle.load(f)
+# Download necessary files
+download_file(f"https://drive.google.com/uc?export=download&id={MODEL_ID}", MODEL_PATH)
+download_file(f"https://drive.google.com/uc?export=download&id={TAGS_ID}", TAGS_PATH)
+download_file(f"https://drive.google.com/uc?export=download&id={EMBEDDINGS_ID}", EMBEDDINGS_PATH)
 
-# Load sentiment analysis pipeline
-sentiment_pipeline = pipeline("sentiment-analysis")
+# Lazy loading
+model = None
+sentiment_pipeline = None
+tags = None
+embeddings = None
 
-# Load saved tags and embeddings
-with open(TAGS_PATH, "r") as f:
-    tags = json.load(f)
+def load_resources():
+    global model, sentiment_pipeline, tags, embeddings
 
-with open(EMBEDDINGS_PATH, "r") as f:
-    embeddings = json.load(f)
+    if model is None:
+        model = SentenceTransformer("all-MiniLM-L6-v2")  # Smaller model
 
-# Convert embeddings to tensors
-positive_embeddings = torch.tensor(embeddings["positive"])
-negative_embeddings = torch.tensor(embeddings["negative"])
-neutral_embeddings = torch.tensor(embeddings["neutral"])
+    if sentiment_pipeline is None:
+        sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english", trust_remote_code=False)
+
+    if tags is None:
+        with open(TAGS_PATH, "r") as f:
+            tags = json.load(f)
+
+    if embeddings is None:
+        with open(EMBEDDINGS_PATH, "r") as f:
+            embeddings = json.load(f)
+
+        # Convert embeddings to PyTorch tensors (float16 for lower memory usage)
+        for key in embeddings:
+            embeddings[key] = torch.tensor(embeddings[key], dtype=torch.float16, device="cpu")
 
 class FeedbackRequest(BaseModel):
     feedback: str
 
 def classify_feedback(feedback):
-    """Classifies feedback as positive, negative, or neutral based on keywords and embeddings."""
+    """Classifies feedback as positive, negative, or neutral using embeddings and sentiment analysis."""
+
+    load_resources()  # Load models only when needed
+
+    feedback_embedding = model.encode(feedback, convert_to_tensor=True, device="cpu").half()  # Convert to float16
 
     # Neutral keyword-based classification
-    neutral_keywords = {
-        "normal", "basic", "average", "fine", "okay", "decent",
-        "standard", "ordinary", "regular", "common", "nothing",
-        "usual", "necessary", "general", "typical", "neutral"
-    }
-
+    neutral_keywords = {"normal", "average", "fine", "okay", "decent", "standard", "neutral"}
     if any(word in feedback.lower() for word in neutral_keywords):
-        best_match_index = torch.argmax(util.pytorch_cos_sim(
-            model.encode(feedback, convert_to_tensor=True), neutral_embeddings
-        )).item()
+        best_match_index = torch.argmax(util.pytorch_cos_sim(feedback_embedding, embeddings["neutral"])).item()
         return "neutral", tags["neutral"][best_match_index]
 
-    # Proceed with embedding similarity for neutral classification
-    feedback_embedding = model.encode(feedback, convert_to_tensor=True)
-    neutral_similarity_scores = util.pytorch_cos_sim(feedback_embedding, neutral_embeddings)
-
-    best_neutral_score = torch.max(neutral_similarity_scores).item()
-    if best_neutral_score > 0.7:  # Increased threshold to make neutral more likely
+    # Compute similarity for neutral feedback
+    neutral_similarity_scores = util.pytorch_cos_sim(feedback_embedding, embeddings["neutral"])
+    if torch.max(neutral_similarity_scores).item() > 0.7:
         best_match_index = torch.argmax(neutral_similarity_scores).item()
         return "neutral", tags["neutral"][best_match_index]
 
@@ -81,18 +84,18 @@ def classify_feedback(feedback):
     sentiment_label = sentiment_result["label"]
     sentiment_score = sentiment_result["score"]
 
-    # Stricter sentiment thresholds
+    # Classify based on sentiment
     if sentiment_label == "POSITIVE" and sentiment_score >= 0.65:
         tag_category = "positive"
-        tag_embeddings = positive_embeddings
+        tag_embeddings = embeddings["positive"]
         tag_list = tags["positive"]
     elif sentiment_label == "NEGATIVE" and sentiment_score >= 0.65:
         tag_category = "negative"
-        tag_embeddings = negative_embeddings
+        tag_embeddings = embeddings["negative"]
         tag_list = tags["negative"]
     else:
         tag_category = "neutral"
-        tag_embeddings = neutral_embeddings
+        tag_embeddings = embeddings["neutral"]
         tag_list = tags["neutral"]
 
     # Find the best matching tag
