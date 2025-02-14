@@ -68,7 +68,9 @@ def classify_feedback(feedback):
     feedback_embedding = model.encode(feedback, convert_to_tensor=True, device="cpu").half()  # Convert to float16
 
     # Neutral keyword-based classification
-    neutral_keywords = {"normal", "average", "fine", "okay", "decent", "standard", "neutral"}
+    neutral_keywords = { "normal", "basic", "average", "fine", "okay", "decent",
+        "standard", "ordinary", "regular", "common", "nothing", "ok"
+        "usual", "necessary", "general", "typical", "neutral"}
     if any(word in feedback.lower() for word in neutral_keywords):
         best_match_index = torch.argmax(util.pytorch_cos_sim(feedback_embedding, embeddings["neutral"])).item()
         return "neutral", tags["neutral"][best_match_index]
