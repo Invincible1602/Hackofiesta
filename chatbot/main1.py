@@ -46,7 +46,7 @@ def get_faq_response(user_query):
     query_embedding = model.encode([user_query], convert_to_numpy=True)
     distances, indices = index.search(query_embedding, 1)
     if distances[0][0] > SIMILARITY_THRESHOLD:
-        return "I'm sorry, but I don't have an answer for that query."
+        return "Hmm, I couldn't find a clear answer to your question.Could you please try rephrasing it or check our website for more details?"
     return df.iloc[indices[0][0]]['answer']
 
 @app.get("/faq/")
