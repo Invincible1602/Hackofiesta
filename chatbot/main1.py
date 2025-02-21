@@ -21,7 +21,7 @@ def load_faq_data(file_path):
     df.columns = ["question", "answer"]
     return df
 
-file_path = "Hackofiesta/chatbot/improved_faq-1.csv"
+file_path = "improved_faq-1.csv"
 df = load_faq_data(file_path)
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
