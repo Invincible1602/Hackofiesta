@@ -52,26 +52,23 @@ if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY environment variable is not set.")
 GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
-def generate_prompt_template(user_query):
+def generate_prompt_template(user_query, word_limit):
     """
-    Create a detailed prompt template for the Gemini API request.
+    Create a detailed prompt template for the Gemini API request,
+    instructing the API to generate an answer in exactly {word_limit} words.
     """
     prompt = (
         f"You are an AI assistant knowledgeable in various topics. "
         f"The user has asked: '{user_query}'. "
-        "Please provide a clear, concise, and informative answer that is both friendly and helpful. "
+        f"Please provide a clear, concise, and informative answer in exactly {word_limit} words that fully addresses the query. "
         "If further clarification is needed, feel free to indicate so."
     )
     return prompt
 
-def format_response_template(generated_text, word_limit=50):
+def format_response_template(generated_text):
     """
-    Format the generated text into a well-structured response.
-    If the text is longer than the specified word_limit, truncate it.
+    Format the generated text into a well-structured response without truncation.
     """
-    words = generated_text.split()
-    if len(words) > word_limit:
-        generated_text = ' '.join(words[:word_limit]) + "..."
     response = (
         f"Here is the information you requested:\n\n{generated_text}\n\n"
         "If you have any additional questions, please let me know!"
@@ -82,7 +79,7 @@ def get_gemini_response(user_query, word_limit=50):
     """
     Call the Gemini API using a prompt template and handle any errors gracefully.
     """
-    prompt = generate_prompt_template(user_query)
+    prompt = generate_prompt_template(user_query, word_limit)
     payload = {
         "contents": [
             {"parts": [{"text": prompt}]}
@@ -107,7 +104,7 @@ def get_gemini_response(user_query, word_limit=50):
               .get("parts", [{}])[0]
               .get("text", "")
     )
-    return format_response_template(generated_text, word_limit)
+    return format_response_template(generated_text)
 
 def is_medical_query(query: str) -> bool:
     """
@@ -155,7 +152,7 @@ def get_faq_response(user_query, word_limit=50):
     return df.iloc[indices[0][0]]['answer']
 
 @app.get("/faq/")
-def faq_query(query: str, word_limit: int = Query(50, description="Maximum number of words in the response")):
+def faq_query(query: str, word_limit: int = Query(50, description="The answer will be provided in exactly this many words (for Gemini responses)")):
     response = get_faq_response(query, word_limit)
     return {"question": query, "answer": response}
 
