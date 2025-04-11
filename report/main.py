@@ -244,19 +244,22 @@ def process_pipeline(image_file: UploadFile, api_key: str):
         "heuristic_accuracy": accuracy
     }
 
-# ----- Single Endpoint for OCR & Report Processing -----
+# ----- Modified Endpoint for Multiple Files -----
 @app.post("/reports-json")
 async def get_report_json(
     api_key: str = Form(default=DEFAULT_OCR_API_KEY),
-    file: UploadFile = File(...)
+    files: List[UploadFile] = File(...)
 ):
     if not api_key:
         raise HTTPException(status_code=400, detail="OCR API key is required (provide via form or set OCR_API_KEY environment variable).")
-    try:
-        report = process_pipeline(file, api_key)
-        return JSONResponse(content=report)
-    except HTTPException as e:
-        raise e
+    reports = {}
+    for file in files:
+        try:
+            report = process_pipeline(file, api_key)
+            reports[file.filename] = report
+        except HTTPException as e:
+            reports[file.filename] = {"error": e.detail}
+    return JSONResponse(content=reports)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
