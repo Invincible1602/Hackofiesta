@@ -4,7 +4,6 @@ warnings.filterwarnings("ignore", message="Glyph 9")
 import re
 import os
 import json
-import datetime
 from io import BytesIO
 from typing import List, Dict
 
@@ -224,9 +223,7 @@ def calculate_heuristic_accuracy(tests, total_lines, ocr_response):
 # ----- FastAPI Service Setup -----
 app = FastAPI(title="Medical Report OCR & Analysis API")
 
-# Global dictionary to store processed reports
-processed_reports: Dict[str, dict] = {}
-
+# Default OCR API key loaded from environment variables.
 DEFAULT_OCR_API_KEY = os.getenv("OCR_API")
 
 def process_pipeline(image_file: UploadFile, api_key: str):
@@ -247,29 +244,19 @@ def process_pipeline(image_file: UploadFile, api_key: str):
         "heuristic_accuracy": accuracy
     }
 
-@app.post("/process-reports")
-async def process_reports(
+# ----- Single Endpoint for OCR & Report Processing -----
+@app.post("/reports-json")
+async def get_report_json(
     api_key: str = Form(default=DEFAULT_OCR_API_KEY),
-    files: List[UploadFile] = File(...)
+    file: UploadFile = File(...)
 ):
     if not api_key:
         raise HTTPException(status_code=400, detail="OCR API key is required (provide via form or set OCR_API_KEY environment variable).")
-    global processed_reports
-    reports_data = {}
-    for file in files:
-        try:
-            report = process_pipeline(file, api_key)
-            reports_data[file.filename] = report
-        except HTTPException as e:
-            reports_data[file.filename] = {"error": e.detail}
-    processed_reports = reports_data
-    return JSONResponse(content=reports_data)
-
-@app.get("/reports-json")
-async def get_reports_json():
-    if not processed_reports:
-        raise HTTPException(status_code=404, detail="No reports have been processed yet.")
-    return JSONResponse(content=processed_reports)
+    try:
+        report = process_pipeline(file, api_key)
+        return JSONResponse(content=report)
+    except HTTPException as e:
+        raise e
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
