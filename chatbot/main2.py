@@ -101,7 +101,7 @@ def is_medical_query(query: str) -> bool:
     "infection", "surgery", "medication", "therapy", "emergency", "clinic", "hospital", "cataract", "cancer",
     "diabetes", "ulcer", "heart", "cardiac", "kidney", "renal", "liver", "stomach", "headache", "migraine",
     "fever", "flu", "asthma", "allergy", "hypertension", "arthritis", "anxiety", "depression", "stroke",
-    "pneumonia", "bronchitis", "covid", "covid-19", "chronic", "acute", "obesity", "pain", "leg pain",
+    "pneumonia", "bronchitis", "covid", "covid-19", "chronic", "acute", "obesity", "pain", "leg pain", "dengue", "malaria", "chickenpox", "chicken pox", "measles", "mumps",
     "arm pain", "back pain", "chest pain", "toothache", "earache", "sore throat", "dizziness", "nausea",
     "vomiting", "diarrhea", "constipation", "rash", "itching", "swelling", "inflammation", "fracture",
     "injury", "trauma", "seizure", "convulsion", "insomnia", "sleep", "appetite", "thyroid", "hormone",
