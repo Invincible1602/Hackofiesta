@@ -145,6 +145,33 @@ def is_medical_query(query: str) -> bool:
     "labored breathing", "shallow breathing", "rapid breathing", "heavy breathing", 
     "gasping for air", "panting", "feeling suffocated", "like I'm drowning", 
     "chest feels tight", "chest feels heavy", "hyperventilating", "noisy breathing", "short breathe"
+    "erectile dysfunction", "impotence", "premature ejaculation", "delayed ejaculation", "retrograde ejaculation", "piles",
+      "cold", "common cold", "heart attack", "broken bone", "bruise",
+    "nosebleed", "food poisoning", "stomach bug", "gastroenteritis",
+    "dehydration", "hangover", "sleep apnea", "vertigo", "numbness",
+    "high blood pressure", "low blood pressure", "hypotension",
+    "irritable bowel syndrome", "IBS", "appendicitis", "hernia",
+    "kidney stones", "gas", "flatulence", "belching", "bloody stool",
+    "cavity", "tooth decay", "gingivitis", "gum disease", "pink eye",
+    "sinus infection", "staph infection", "yeast infection",
+    "sunburn", "hives", "blister", "itchy eyes", "eczema flare-up",
+    "panic attack", "phobia", "OCD", "PTSD", "autism", "ADHD",
+    "restless leg syndrome", "narcolepsy", "binge eating disorder",
+    "thyroid disorder", "Hashimoto’s", "Graves’ disease", "PCOS",
+    "gestational diabetes", "metabolic syndrome", "vitamin D deficiency",
+    "pregnancy", "morning sickness", "miscarriage", "menstrual cramps",
+    "PMS", "amenorrhea", "dysmenorrhea", "menopause", "fibromyalgia",
+    "BPH", "prostate enlargement", "kidney infection", "pyelonephritis",
+    "mono", "mononucleosis", "cholera", "typhoid fever", "tuberculosis (TB)",
+    "rotavirus", "norovirus", "RSV", "hepatitis D", "hepatitis E",
+    "scleroderma", "Sjogren’s syndrome", "psoriatic arthritis",
+    "skin cancer", "squamous cell carcinoma", "melanoma", "breast tumor",
+    "lung tumor", "prostate tumor", "pancreatic cancer", "leukemia subtype",
+    "lymphoma subtype", "Hodgkin’s lymphoma", "non-Hodgkin’s lymphoma",
+    "whooping cough", "pertussis", "RSV", "mumps", "rubella", "chickenpox",
+    "down syndrome", "autism spectrum disorder", "spina bifida",
+    "PTSD", "addiction", "withdrawal", "electrolyte imbalance",
+    "muscle strain", "sciatica", "plantar fasciitis"
     ]
     query_lower = query.lower()
     return any(keyword in query_lower for keyword in medical_keywords)
