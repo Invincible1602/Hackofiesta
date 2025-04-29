@@ -97,7 +97,7 @@ def get_gemini_response(user_query, word_limit=100):
 
 def is_medical_query(query: str) -> bool:
     medical_keywords = [
-       "medicine", "health", "doctor", "medical", "treatment", "diagnosis", "symptom", "illness", "disease","cure"
+        "medicine", "health", "doctor", "medical", "treatment", "diagnosis", "symptom", "illness", "disease","cure"
     "infection", "surgery", "medication", "therapy", "emergency", "clinic", "hospital", "cataract", "cancer",
     "diabetes", "ulcer", "heart", "cardiac", "kidney", "renal", "liver", "stomach", "headache", "migraine",
     "fever", "flu", "asthma", "allergy", "hypertension", "arthritis", "anxiety", "depression", "stroke",
@@ -132,24 +132,61 @@ def is_medical_query(query: str) -> bool:
     "proteinuria", "hematuria", "dysuria", "polyuria", "oliguria", "nocturia", "urinary retention",
     "urinary incontinence", "interstitial cystitis", "cystitis", "prostatitis", "bladder cancer","urinary"
     "uremia", "creatinine", "BUN", "glomerular filtration rate", "urine", "urinary problem", "urinary tract",
+    "fatigue", "exhaustion", "muscle ache", "body ache", "night sweats",
+    "chills", "shivering", "cold sweats",
+    "runny nose", "stuffy nose", "nasal congestion", "sneezing", "sniffling",
+    "coughing", "wheezing",
+    "queasy", "nauseous", 
+    "pressure", "tightness", "squeezing", "lightheadedness", "feeling faint",
+    "pins and needles", "stiff neck", "yawning", "food cravings", "blurred vision",
+    "loss of smell", "loss of taste",
+    "frequent urination", "thirsty", "weight loss", "weight gain", "cuts heal slowly",
+    "difficulty breathing", "shortness of breath", "can't catch my breath", "air hunger", 
+    "labored breathing", "shallow breathing", "rapid breathing", "heavy breathing", 
+    "gasping for air", "panting", "feeling suffocated", "like I'm drowning", 
+    "chest feels tight", "chest feels heavy", "hyperventilating", "noisy breathing", "short breathe"
     ]
     query_lower = query.lower()
     return any(keyword in query_lower for keyword in medical_keywords)
 
 
+def is_conversational_query(query: str) -> bool:
+    """
+    Detect simple conversational queries like greetings and thanks.
+    """
+    conv_keywords = [
+        "hey", "good morning", "good afternoon", "good evening", "thanks", "thank you"
+    ]
+    q = query.lower().strip()
+    # Check if the user query matches or contains common conversational phrases
+    return any(q == kw or q.startswith(kw) or kw in q for kw in conv_keywords)
+
+
 def get_faq_response(user_query, word_limit=100):
+    # Exit case
     if user_query.lower().strip() == "exit":
         return "Thank you for using the FAQ Bot. Have a great day!"
+
+    # Handle conversational queries via Gemini for natural replies
+    if is_conversational_query(user_query):
+        return get_gemini_response(user_query, word_limit)
+
+    # Embed and search.
     query_embedding = model.encode([user_query], convert_to_numpy=True)
     distances, indices = index.search(query_embedding, 1)
+
+    # If no close FAQ match
     if distances[0][0] > SIMILARITY_THRESHOLD:
         if is_medical_query(user_query):
             return get_gemini_response(user_query, word_limit)
         else:
             return (
-                "Hmm, I couldn’t find a clear answer to your question. Could you please try rephrasing it? "
+                "Hmm, I couldn’t find a clear answer to your question. "
+                "Could you please try rephrasing it? "
                 "If you have any medical problem, book an appointment, or check our website for more details!"
             )
+
+    # Return matched FAQ
     return df.iloc[indices[0][0]]['answer']
 
 @app.get("/faq/")
