@@ -177,8 +177,19 @@ def is_medical_query(query: str) -> bool:
    "neck pain", "stiff neck", "cervical radiculopathy", "whiplash", "goiter", "thyroid nodule", "lymph node swelling", "neck lump", "torticollis",
    "wrist pain", "finger pain", "hand numbness", "tingling in hands", "carpal tunnel syndrome", "trigger finger", "tendonitis", "hand arthritis", "ganglion cyst", "Raynaud's phenomenon", "hand tremor",
     "leg pain", "knee pain", "ankle sprain", "calf cramp", "varicose veins", "shin splints", "deep vein thrombosis", "leg swelling", "leg fracture", "foot pain", "heel pain", "plantar fasciitis",
-    "abdominal pain", "chest pain", "heart pain", "lung pain", "liver pain", "spleen pain", "pancreas pain", "kidney pain", "renal colic", "appendicitis", "bladder pain"
-
+    "abdominal pain", "chest pain", "heart pain", "lung pain", "liver pain", "spleen pain", "pancreas pain", "kidney pain", "renal colic", "appendicitis", "bladder pain",
+    "ADHD","head", "skull", "scalp", "face", "forehead", "temple", "eye", "eyelid", "eyelash", "eyebrow", "iris", "pupil", "lens", "retina",
+    "ear", "earlobe", "ear canal", "nose", "nostril", "bridge of nose", "nasal cavity", "sinus", "mouth", "lip", "gum", "tooth", "tongue", "teeth",
+    "jaw", "chin", "cheek", "throat", "palate", "uvula", "tonsil", "neck", "nape", "cervical spine",
+    "shoulder", "clavicle", "collarbone", "arm", "upper arm", "elbow", "forearm", "wrist", "hand", "palm", "back of hand",
+    "finger", "thumb", "index finger", "middle finger", "ring finger", "little finger", "knuckle", "nail",
+    "chest", "breast", "areola", "nipple", "sternum", "rib", "spine", "torso", "abdomen", "stomach", "navel", "waist",
+    "back", "lower back", "lumbar", "hip", "pelvis", "buttock", "gluteus", "groin", "genital", "thigh", "hamstring",
+    "knee", "kneecap", "patella", "leg", "calf", "shin", "ankle", "heel", "foot", "arch", "sole", "instep",
+    "toe", "big toe", "second toe", "third toe", "fourth toe", "little toe", "Achilles tendon",
+   "brain", "spinal cord", "heart", "lung", "liver", "kidney", "pancreas", "spleen", "intestine", "small intestine", "large intestine",
+    "colon", "rectum", "esophagus", "trachea", "larynx", "diaphragm", "bladder", "uterus", "ovary", "fallopian tube",
+    "prostate", "testis", "penis", "scrotum", "urethra", "vagina", "vulva"
     ]
     query_lower = query.lower()
     return any(keyword in query_lower for keyword in medical_keywords)
