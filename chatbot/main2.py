@@ -171,7 +171,14 @@ def is_medical_query(query: str) -> bool:
     "whooping cough", "pertussis", "RSV", "mumps", "rubella", "chickenpox",
     "down syndrome", "autism spectrum disorder", "spina bifida",
     "PTSD", "addiction", "withdrawal", "electrolyte imbalance",
-    "muscle strain", "sciatica", "plantar fasciitis"
+    "muscle strain", "sciatica", "plantar fasciitis","infection", "bad",
+    "viral infection", "bacterial infection", "fungal infection", "parasitic infection", "staph infection", "yeast infection", "blood infection", "sepsis", "septicemia", "MRSA", "C. diff", "ringworm", "athlete's foot", "jock itch", "impetigo", "eye infection", "sinus infection", "UTI",
+   "cold sore", "thrush", "black hairy tongue", "canker sore", "leukoplakia", "lichen planus", "geographic tongue", "oral cancer", "stomatitis", "glossitis", "mouth ulcer", "halitosis", "gum disease", "gingivitis",
+   "neck pain", "stiff neck", "cervical radiculopathy", "whiplash", "goiter", "thyroid nodule", "lymph node swelling", "neck lump", "torticollis",
+   "wrist pain", "finger pain", "hand numbness", "tingling in hands", "carpal tunnel syndrome", "trigger finger", "tendonitis", "hand arthritis", "ganglion cyst", "Raynaud's phenomenon", "hand tremor",
+    "leg pain", "knee pain", "ankle sprain", "calf cramp", "varicose veins", "shin splints", "deep vein thrombosis", "leg swelling", "leg fracture", "foot pain", "heel pain", "plantar fasciitis",
+    "abdominal pain", "chest pain", "heart pain", "lung pain", "liver pain", "spleen pain", "pancreas pain", "kidney pain", "renal colic", "appendicitis", "bladder pain"
+
     ]
     query_lower = query.lower()
     return any(keyword in query_lower for keyword in medical_keywords)
