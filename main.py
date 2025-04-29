@@ -102,7 +102,13 @@ async def predict_specialist(user_input: UserInput):
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Gemini API error: {e}")
 
-    return {"predicted_specialist": gemini_specialist, "confidence_score": 0.0}
+    # Normalize orthopedics-related responses
+    if re.search(r'orthoped', gemini_specialist, flags=re.IGNORECASE):
+        normalized = "Orthopedic"
+    else:
+        normalized = gemini_specialist
+
+    return {"predicted_specialist": normalized, "confidence_score": 0.0}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
