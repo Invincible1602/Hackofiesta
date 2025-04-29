@@ -3,16 +3,11 @@ from pydantic import BaseModel
 import re
 from textblob import TextBlob
 import requests
-import os
-from dotenv import load_dotenv
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-# Load environment variables
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY environment variable is not set.")
+# Hard-coded Gemini API key
+GEMINI_API_KEY = "AIzaSyCmsy5_gdha76A1hm4UI9EzLwpU3gL28Uw"
 GEMINI_ENDPOINT = (
     f"https://generativelanguage.googleapis.com/v1beta/models/"
     f"gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
